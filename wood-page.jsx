@@ -8,6 +8,7 @@ function WoodPage() {
   const [messages, setMessages] = React.useState([]);
   const [composing, setComposing] = React.useState(false);
   const [justAdded, setJustAdded] = React.useState(null);
+  const isMobile = window.innerWidth < 600;
 
   React.useEffect(() => {
     const unsubscribe = listenMessages(setMessages);
@@ -87,32 +88,32 @@ function WoodPage() {
       {/* Notes board */}
       <div style={{
         maxWidth: 1280, margin: '0 auto',
-        padding: '28px 20px 60px',
-        columnWidth: '230px',
-        columnGap: '28px',
+        padding: isMobile ? '20px 12px 40px' : '28px 20px 60px',
+        columnWidth: isMobile ? '150px' : '230px',
+        columnGap: isMobile ? '12px' : '28px',
       }}>
         {/* Teacher photo — first slot */}
         <div style={{
           breakInside: 'avoid', pageBreakInside: 'avoid',
-          marginBottom: '32px', display: 'inline-block', width: '100%',
+          marginBottom: isMobile ? '20px' : '32px', display: 'inline-block', width: '100%',
         }}>
           <div style={{
-            position: 'relative', width: 210,
+            position: 'relative', width: isMobile ? 140 : 210,
             transform: 'rotate(-1.5deg)', transformOrigin: '50% 0',
           }}>
             <div style={{ position: 'absolute', top: -10, left: '50%', transform: 'translateX(-50%) rotate(1deg)', zIndex: 2 }}>
-              <WashiTape seed={2} width={90}/>
+              <WashiTape seed={2} width={isMobile ? 60 : 90}/>
             </div>
             <div style={{
               background: '#fff8ed', border: '1px solid #e8d8b8',
-              padding: '10px 10px 32px',
+              padding: isMobile ? '6px 6px 22px' : '10px 10px 32px',
               boxShadow: '0 4px 8px rgba(60,40,20,.18)',
             }}>
               <img src="teacher_photo.png" alt="선생님"
                 style={{ width: '100%', display: 'block', objectFit: 'cover' }}/>
               <div style={{
-                fontFamily: '"Gaegu", cursive', fontSize: 17,
-                color: '#7a5a3a', textAlign: 'center', marginTop: 10,
+                fontFamily: '"Gaegu", cursive', fontSize: isMobile ? 13 : 17,
+                color: '#7a5a3a', textAlign: 'center', marginTop: isMobile ? 6 : 10,
               }}>유청훈 선생님</div>
             </div>
           </div>
@@ -127,10 +128,10 @@ function WoodPage() {
         ) : messages.map((msg) => (
           <div key={msg.id} style={{
             breakInside: 'avoid', pageBreakInside: 'avoid',
-            marginBottom: '32px', display: 'inline-block', width: '100%',
+            marginBottom: isMobile ? '20px' : '32px', display: 'inline-block', width: '100%',
             animation: justAdded === msg.id ? 'wood-page-drop .55s cubic-bezier(.34,1.56,.64,1)' : undefined,
           }}>
-            <WoodNote msg={msg} onClick={() => {}} flow/>
+            <WoodNote msg={msg} onClick={() => {}} flow small={isMobile}/>
           </div>
         ))}
       </div>

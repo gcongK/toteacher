@@ -32,18 +32,19 @@ function WashiTape({ seed, width = 70, angle = 0 }) {
   );
 }
 
-function WoodNote({ msg, onClick, flow }) {
+function WoodNote({ msg, onClick, flow, small }) {
   const c = WOOD_COLORS[msg.color] || WOOD_COLORS.coral;
   const seed = hashSeed(msg.id);
   const rot = msg._rot !== undefined ? msg._rot : noteRotation(msg.id);
   const tapeAngle = (seededRandom(seed, 7) * 2 - 1) * 8 - 90; // mostly horizontal
+  const noteW = small ? 140 : 210;
   return (
     <div
       onClick={onClick}
       style={{
         position: flow ? 'relative' : 'absolute',
         ...(flow ? {} : { left: msg._x, top: msg._y }),
-        width: 210,
+        width: noteW,
         transform: `rotate(${rot}deg)`,
         transformOrigin: '50% 0',
         transition: 'transform .3s cubic-bezier(.2,.7,.3,1), filter .25s',
@@ -66,28 +67,28 @@ function WoodNote({ msg, onClick, flow }) {
         transform: `translateX(-50%) rotate(${(seededRandom(seed, 9) * 2 - 1) * 6}deg)`,
         zIndex: 2,
       }}>
-        <WashiTape seed={seed} width={80} angle={0}/>
+        <WashiTape seed={seed} width={small ? 56 : 80} angle={0}/>
       </div>
       {/* paper */}
       <div style={{
         position: 'relative',
         background: c.bg,
         backgroundImage: `
-          repeating-linear-gradient(180deg, transparent 0 26px, rgba(120,90,60,.07) 26px 27px)
+          repeating-linear-gradient(180deg, transparent 0 ${small ? 20 : 26}px, rgba(120,90,60,.07) ${small ? 20 : 26}px ${small ? 21 : 27}px)
         `,
-        padding: '24px 16px 14px',
+        padding: small ? '16px 10px 10px' : '24px 16px 14px',
         boxShadow: '0 4px 8px rgba(60,40,20,.18), 0 1px 2px rgba(0,0,0,.08)',
         border: `1px solid ${c.edge}`,
-        minHeight: 180,
+        minHeight: small ? 120 : 180,
         display: 'flex', flexDirection: 'column',
       }}>
         <div style={{
-          fontFamily: '"Gaegu", cursive', fontSize: 19, lineHeight: 1.45, fontWeight: 400,
+          fontFamily: '"Gaegu", cursive', fontSize: small ? 14 : 19, lineHeight: 1.45, fontWeight: 400,
           color: '#5a3a1a', whiteSpace: 'pre-wrap', flex: 1, wordBreak: 'break-all', overflowWrap: 'break-word',
         }}>{msg.text}</div>
         <div style={{
-          fontFamily: '"Gaegu", cursive', fontSize: 16, fontWeight: 700,
-          color: '#7a5a3a', textAlign: 'right', marginTop: 10,
+          fontFamily: '"Gaegu", cursive', fontSize: small ? 12 : 16, fontWeight: 700,
+          color: '#7a5a3a', textAlign: 'right', marginTop: 8,
         }}>♡ {msg.name}</div>
       </div>
     </div>
